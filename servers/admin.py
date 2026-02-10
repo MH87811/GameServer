@@ -16,7 +16,7 @@ class ServerPlanAdmin(admin.ModelAdmin):
     search_fields = ('title', 'game__name')
 
 
-@admin.register()
+@admin.register(PlanDuration)
 class PlanDurationAdmin(admin.ModelAdmin):
     list_display = ('plan', 'duration_months', 'discount_percent', 'total_price', 'final_price', 'is_active')
     list_filter = ('plan__game', 'is_active')
