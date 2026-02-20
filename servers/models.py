@@ -1,6 +1,6 @@
-from decimal import Decimal
-
 from django.db import models
+from decimal import Decimal
+from django.utils import timezone
 
 # Create your models here.
 
@@ -14,7 +14,6 @@ class Game(models.Model):
 
 class ServerPlan(models.Model):
     title = models.CharField(max_length=64)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='game')
     cpu_core = models.PositiveIntegerField()
     RAM = models.PositiveIntegerField()
     storage = models.PositiveIntegerField()
@@ -24,6 +23,26 @@ class ServerPlan(models.Model):
 
     def __str__(self):
         return f'{self.game} - {self.title}'
+
+class GameServerPlan(models.Model):
+    PLAN_LEVEL_CHOICE = (
+        (1, 'Bronze'),
+        (2, 'Silver'),
+        (3, 'Gold'),
+        (4, 'Platinum'),
+    )
+
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    starts_at = models.DateTimeField()
+    ends_at = models.DateTimeField()
+    plan_level = models.IntegerField(choices=PLAN_LEVEL_CHOICE)
+    duration = models.PositiveIntegerField()
+    payed_amount = models.PositiveIntegerField()
+
+    @property
+    def is_active(self):
+        return self.ends_at > timezone.now()
+
 
 class PlanDuration(models.Model):
     plan = models.ForeignKey(ServerPlan, on_delete=models.CASCADE, related_name='plan')

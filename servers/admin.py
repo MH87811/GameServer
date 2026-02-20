@@ -11,13 +11,13 @@ class GameAdmin(admin.ModelAdmin):
 
 @admin.register(ServerPlan)
 class ServerPlanAdmin(admin.ModelAdmin):
-    list_display = ('title', 'game', 'cpu_core', 'RAM', 'storage', 'price', 'is_active', 'created_at')
-    list_filter = ('game', 'is_active')
-    search_fields = ('title', 'game__name')
+    list_display = ('title', 'cpu_core', 'RAM', 'storage', 'price', 'is_active', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('title',)
 
 
 @admin.register(PlanDuration)
 class PlanDurationAdmin(admin.ModelAdmin):
     list_display = ('plan', 'duration_months', 'discount_percent', 'total_price', 'final_price', 'is_active')
-    list_filter = ('plan__game', 'is_active')
-    search_fields = ('plan__title', 'plan__game__name')
+    list_filter = ('is_active',)
+    search_fields = ('plan__title',)
