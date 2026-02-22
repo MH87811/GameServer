@@ -39,7 +39,6 @@ class LoginView(APIView):
             },
             status=status.HTTP_200_OK
         )
-
         response.set_cookie(
             key='refresh_token',
             value=refresh,
@@ -48,6 +47,7 @@ class LoginView(APIView):
             samesite='Strict',
             max_age=7*24*60*60
         )
+
         return response
 
 class TokenRefreshView(APIView):
@@ -95,7 +95,6 @@ class LogoutView(APIView):
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-
         except TokenError:
             pass
 

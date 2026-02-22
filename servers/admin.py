@@ -21,3 +21,9 @@ class PlanDurationAdmin(admin.ModelAdmin):
     list_display = ('plan', 'duration_months', 'discount_percent', 'total_price', 'final_price', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('plan__title',)
+
+@admin.register(DiscountCode)
+class DiscountCodeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'type', 'value', 'code')
+    list_filter = ('is_active',)
+    search_fields = ('user',)
