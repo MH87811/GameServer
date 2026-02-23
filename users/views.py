@@ -34,7 +34,7 @@ class LoginView(APIView):
 
         response = Response(
             {
-                'username': serializer.validated_data['user'].username,
+                'phone': serializer.validated_data['user'].phone,
                 'access_token': access
             },
             status=status.HTTP_200_OK

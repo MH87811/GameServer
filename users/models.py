@@ -19,7 +19,7 @@ class MyUserManager(BaseUserManager):
         return user
     def create_superuser(self, email, phone, password=None, **extra_fields):
         extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('terms_agreement', True)
         user = self.create_user(
             email=email,
             phone=phone,

@@ -15,21 +15,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'phone', 'password', 'password2']
-
-    def validate_username(self, value):
-        if User.objects.get(username=value).exists():
-            raise serializers.ValidationError('username already in user')
-        return value
+        fields = ['id', 'email', 'phone', 'full_name', 'terms_agreement', 'nationality_code', 'state', 'city', 'address', 'password', 'password2']
 
     def validate_email(self, value):
-        if User.objects.get(email=value).exists():
+        if User.objects.filter(email=value).exists():
             raise serializers.ValidationError('email already in user')
         return value
 
     def validate_phone(self, value):
-        if User.objects.get(phone=value).exists():
+        if User.objects.filter(phone=value).exists():
             raise serializers.ValidationError('phone already in user')
+        return value
+
+    def validate_nationality_code(self, value):
+        if len(value) == 10:
+            raise serializers.ValidationError('nationality code must be exactly 10 digits long')
+        if User.objects.filter(nationality_code=value).exists():
+            raise serializers.ValidationError('user with this nationality code already exists')
         return value
 
     def validate_password(self, value):
@@ -37,25 +39,29 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
+        terms_agreement = data.get('terms_agreement', False)
         if data['password'] != data['password2']:
             raise serializers.ValidationError('password did not match')
+        if not terms_agreement:
+            raise serializers.ValidationError('you need to agree to our terms')
         return data
 
     def create(self, validated_data):
         with transaction.atomic():
+            validated_data.pop('password2')
             user = User.objects.create_user(**validated_data)
         return user
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data['username']
+        email = data['email']
         password = data['password']
         
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
         
         if not user:
             raise serializers.ValidationError('invalid credential')

@@ -25,5 +25,5 @@ class PlanDurationAdmin(admin.ModelAdmin):
 @admin.register(DiscountCode)
 class DiscountCodeAdmin(admin.ModelAdmin):
     list_display = ('user', 'type', 'value', 'code')
-    list_filter = ('is_active',)
+    list_filter = ('is_available',)
     search_fields = ('user',)
