@@ -1,0 +1,1 @@
+A Django backend foundation for a game-server management platform, modeling games, server plans, game-server subscriptions, plan durations, pricing, discounts, user accounts, and JWT-based authentication with Django REST Framework.
